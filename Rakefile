@@ -5,7 +5,7 @@ require 'echoe'
 
 Echoe.new('webs', '0.1.0') do |p|
   p.description    = "Reusable webs stuff."
-  p.url            = "git@github.com:websdev/websgem.git"
+  p.url            = "https://colczak@github.com/websdev/websgem.git"
   p.author         = "Chuck Olczak"
   p.email          = "chuck@webs.com"
   p.ignore_pattern = ["tmp/*", "script/*"]
