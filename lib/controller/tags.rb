@@ -4,9 +4,9 @@ module Webs
       def fwml tagname, options={}, &block
         s_options = options.each_key.collect{|k| "#{k.to_s}=\"#{options[k]}\"" }.join(' ')
         return "<fw:#{tagname} s_options/>" unless block
-        concat("<fw:#{tagname} s_options/>", block.binding)
+        concat("<fw:#{tagname} s_options/>")
         yield
-        concat("</fw:#{tagname}>", block.binding)
+        concat("</fw:#{tagname}>")
       end  
     end
   end
