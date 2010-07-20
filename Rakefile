@@ -3,7 +3,7 @@ require 'rubygems'
 require 'rake'
 require 'echoe'
 
-Echoe.new('webgem', '0.1.0') do |p|
+Echoe.new('webs', '0.1.0') do |p|
   p.description    = "Reusable webs stuff."
   p.url            = "git@github.com:websdev/websgem.git"
   p.author         = "Chuck Olczak"

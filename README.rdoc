@@ -15,7 +15,7 @@ Right now it's composed of 1 modules:
 
 To use WebsGem with your stuff, in gemfile:
 
-  gem "webgem", :git => "git@github.com:websdev/websgem.git"
+  gem "webs", :git => "git@github.com:websdev/websgem.git"
 
 === Rails 2.3
 
