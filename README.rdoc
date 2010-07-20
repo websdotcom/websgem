@@ -1,0 +1,48 @@
+== WebsGem
+
+WebsGem is a holder of knowlege with unknown equal. It:
+
+* Manages fw:params
+
+Right now it's composed of 1 modules:
+
+* Controller: Stuff for controllers
+** params: Stuff for fw params
+
+== Installation
+
+=== Rails 3
+
+To use WebsGem with your stuff, in gemfile:
+
+  gem "webgem", :git => "git@github.com:websdev/websgem.git"
+
+=== Rails 2.3
+
+
+== Basic Usage
+
+To add params support to your controller stuff do:
+
+== TODO
+
+Please refer to TODO file.
+
+== Maintainers
+
+* José Valim (http://github.com/josevalim)
+* Carlos Antônio da Silva (http://github.com/carlosantoniodasilva)
+
+== Contributors
+
+We have a long list of valued contributors. Check them all at:
+
+http://github.com/plataformatec/devise/contributors
+
+== Bugs and Feedback
+
+If you discover any bugs, please keep them to yourself.
+
+== License
+
+Webs License. Copyright 2010 Webs
