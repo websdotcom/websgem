@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = %q{Reusable webs stuff.}
   s.email = %q{chuck@webs.com}
   s.extra_rdoc_files = ["README.rdoc", "lib/controller/params.rb", "lib/webs.rb"]
-  s.files = ["README.rdoc", "Rakefile", "lib/controller/params.rb", "lib/webs.rb", "Manifest", "webs.gemspec"]
+  s.files = ["README.rdoc", "Rakefile", "lib/controller/params.rb", "lib/webs.rb", "webs.gemspec", "Manifest"]
   s.homepage = %q{git@github.com:websdev/websgem.git}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Webs", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
