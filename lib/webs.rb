@@ -6,3 +6,4 @@ module Webs
 end
 
 require dir + 'controller/params'
+require dir + 'controller/tags'
