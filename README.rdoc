@@ -20,9 +20,21 @@ To use WebsGem with your stuff, in gemfile:
 === Rails 2.3
 
 
-== Basic Usage
+== Params Helpers
 
-To add params support to your controller stuff do:
+* Add helper to a view form controller:
+helper Webs::Controller::Params
+
+* Include in controller or whatever:
+include Webs::Controller::Params
+
+* Basic convenience methods for all the fw params
+Instead of "params[:fw_sig_session_key]" now you have fw_sig_session_key
+
+* Cool helper methods:
+fw_app_url : full url of the app
+ex: http://mysite.webs.com/apps/videos
+
 
 == TODO
 

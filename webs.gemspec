@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chuck Olczak"]
-  s.date = %q{2010-07-20}
+  s.date = %q{2010-07-21}
   s.description = %q{Reusable webs stuff.}
   s.email = %q{chuck@webs.com}
   s.extra_rdoc_files = ["README.rdoc", "lib/controller/params.rb", "lib/controller/tags.rb", "lib/webs.rb"]
-  s.files = ["README.rdoc", "Rakefile", "lib/controller/params.rb", "lib/controller/tags.rb", "lib/webs.rb", "webs.gemspec"]
+  s.files = ["README.rdoc", "Rakefile", "lib/controller/params.rb", "lib/controller/tags.rb", "lib/webs.rb", "webs.gemspec", "Manifest"]
   s.homepage = %q{https://colczak@github.com/websdev/websgem.git}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Webs", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
