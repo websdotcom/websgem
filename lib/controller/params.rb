@@ -5,6 +5,10 @@ module Webs
         params[:fw_sig]
       end  
       
+      def fw_sig_site
+        params[:fw_sig_site]
+      end  
+      
       def fw_sig_is_admin
         params[:fw_sig_is_admin]
       end  
@@ -39,6 +43,10 @@ module Webs
    
       def fw_sig
         params[:fw_sig]
+      end  
+   
+      def fw_sig_width
+        params[:fw_sig_width]
       end  
    
       def fb_sig_network
