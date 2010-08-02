@@ -11,7 +11,11 @@ module Webs
         output.safe_concat("<fw:#{tagname}#{s_options}>")
         output << content
         output.safe_concat("</fw:#{tagname}>")
-      end  
+      end
+      
+      def webs_image_url img
+        "http://#{Webs::ASSET_HOST}/images/#{img}"
+      end
     end
   end
 end
