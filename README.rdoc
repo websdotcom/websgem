@@ -42,14 +42,9 @@ Please refer to TODO file.
 
 == Maintainers
 
-* José Valim (http://github.com/josevalim)
-* Carlos Antônio da Silva (http://github.com/carlosantoniodasilva)
+* Chuck Olczak (http://github.com/colczak)
 
 == Contributors
-
-We have a long list of valued contributors. Check them all at:
-
-http://github.com/plataformatec/devise/contributors
 
 == Bugs and Feedback
 
