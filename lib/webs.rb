@@ -1,7 +1,7 @@
 dir = Pathname(__FILE__).dirname.expand_path
 
 module Webs
-  VERSION = "0.1.0".freeze
+  VERSION = "0.1.1".freeze
 
   ANYONE = 0
   LIMITED = 1
