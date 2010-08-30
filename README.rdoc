@@ -6,7 +6,7 @@ WebsGem is a holder of knowlege with unknown equal. It:
 
 Right now it's composed of 1 modules:
 
-* Controller: Stuff for controllers
+** Controller: Stuff for controllers
 ** params: Stuff for fw params
 
 == Installation
@@ -20,13 +20,21 @@ To use WebsGem with your stuff, in gemfile:
 === Rails 2.3
 
 
-== Params Helpers
+== Usage
 
-* Add helper to a view form controller:
-helper Webs::Controller::Params
+In a controller:
 
-* Include in controller or whatever:
-include Webs::Controller::Params
+ require 'webs'
+ 
+ class Front::Webs::SitesController < ActionController::Base
+   ...
+ 
+   include Webs::Controller::WebsController
+   webs_helpers
+  
+   # NOTE: Uses Webs::SECRET
+   before_filter :require_valid_user, :except=>[:tab, :contactme_login]
+  
 
 * Basic convenience methods for all the fw params
 Instead of "params[:fw_sig_session_key]" now you have fw_sig_session_key
@@ -35,6 +43,16 @@ Instead of "params[:fw_sig_session_key]" now you have fw_sig_session_key
 fw_app_url : full url of the app
 ex: http://mysite.webs.com/apps/videos
 
+* Security
+
+Create a webs.rb file in config/initializers
+
+ module Webs
+   SECRET = "your_secret_key"
+ end
+
+* FWML Tag:
+ <%= fwml :tagname, ... %>
 
 == TODO
 
