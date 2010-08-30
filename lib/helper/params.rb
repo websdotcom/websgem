@@ -1,5 +1,5 @@
 module Webs
-  module Controller
+  module Helper
     module Params
       def fw_sig
         params[:fw_sig]
@@ -61,45 +61,48 @@ module Webs
       def webs_permission
         case fw_sig_permissions
           when /admin/i
-            ADMIN
+            Permission::ADMIN
           when /owner/i
-            OWNER
+            Permission::OWNER
           when /moderator/i
-            MODERATORS
+            Permission::MODERATORS
           when /contributor/i
-            MEMBERS
+            Permission::MEMBERS
           when /limited/i
-            LIMITED
+            Permission::LIMITED
           else
-            ANYONE
+            Permission::ANYONE
         end
       end
       
       # does fw_sig_permissions contain at least perm
-      def webs_permission?( perm=ANYONE )
+      def webs_permission?( perm=Permission::ANYONE )
         webs_permission >= perm
       end
 
       def webs_admin?
-        fw_sig_permissions && webs_permission == ADMIN
+        fw_sig_permissions && webs_permission == Permission::ADMIN
       end
       
       def webs_owner?
-        fw_sig_permissions && webs_permission == MODERATORS
+        fw_sig_permissions && webs_permission == Permission::MODERATORS
       end
       
       def webs_contributor?
-        fw_sig_permissions && webs_permission == LIMITED
+        fw_sig_permissions && webs_permission == Permission::LIMITED
       end
       
       def webs_moderator?
-        fw_sig_permissions && webs_permission == ANYONE
+        fw_sig_permissions && webs_permission == Permission::ANYONE
       end
       
       def webs_site_owner_or_admin?
         webs_admin? || webs_owner?
       end
       
+      def webs_params
+        params.select{ |k,v| k.starts_with?("fw_sig_") }.sort
+      end
       
       # The full url of the app.  Since in APP_NAME can be different in different environments this is currently
       # defined in a global var, usually in the respective env file, however APP_NAME should be moved to something

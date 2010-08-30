@@ -1,5 +1,5 @@
 module Webs
-  module Controller
+  module Helper
     module Tags
       def fwml tagname, options={}, &block
         s_options = ' ' + options.each_key.collect{|k| "#{k.to_s}=\"#{options[k]}\"" }.join(' ')  if options.size > 0
