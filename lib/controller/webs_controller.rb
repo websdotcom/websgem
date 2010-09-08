@@ -29,9 +29,18 @@ module Webs
         Digest::MD5.hexdigest(webs_auth_string + secret)
       end
     
-      def require_valid_user
+      # FILTERS
+      def validate_webs_session
         render :text => "Access Denied: Webs::SECRET not defined." and return(false) unless defined?( Webs::SECRET )
         render :text => "Access Denied" and return(false) unless fw_sig == webs_auth( Webs::SECRET )
+      end
+      
+      def require_webs_user
+        render( :text => "<fw:require-login />" ) unless !fw_sig_user.blank? && fw_sig_user.to_i > 0
+      end
+      
+      def require_webs_admin
+        render(:text => "You are not authorized.") unless webs_admin?
       end
     end
   end

@@ -45,6 +45,10 @@ module Webs
         params[:fw_sig]
       end  
    
+      def fw_sig_user
+        params[:fw_sig_user]
+      end  
+   
       def fw_sig_width
         params[:fw_sig_width]
       end  
