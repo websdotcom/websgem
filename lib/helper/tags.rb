@@ -7,10 +7,18 @@ module Webs
         return "<fw:#{tagname}#{s_options}/>" unless block
 
         content = capture(&block)
-        output = ActiveSupport::SafeBuffer.new
-        output.safe_concat("<fw:#{tagname}#{s_options}>")
-        output << content
-        output.safe_concat("</fw:#{tagname}>")
+        begin
+          # Rails 3
+          output = ActiveSupport::SafeBuffer.new
+          output.safe_concat("<fw:#{tagname}#{s_options}>")
+          output << content
+          output.safe_concat("</fw:#{tagname}>")
+        rescue
+          concat("<fw:#{tagname}#{s_options}>", block.binding)
+          concat( content, block.binding)
+          concat("</fw:#{tagname}>", block.binding)
+          
+        end
       end
       
       def webs_image_url img

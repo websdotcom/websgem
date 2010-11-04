@@ -1,62 +1,11 @@
 module Webs
   module Helper
     module Params
-      def fw_sig
-        params[:fw_sig]
-      end  
-      
-      def fw_sig_site
-        params[:fw_sig_site]
-      end  
-      
-      def fw_sig_is_admin
-        params[:fw_sig_is_admin]
-      end  
-
-      def fw_sig_permission_level
-        params[:fw_sig_permission_level]
-      end  
-      
-      def fw_sig_session_key
-        params[:fw_sig_session_key]
-      end  
-      
-      def fw_sig_tier
-        params[:fw_sig_tier]
-      end  
-      
-      def fw_sig_permissions
-        params[:fw_sig_permissions]
-      end  
-      
-      def fw_sig_time
-        params[:fw_sig_time]
-      end  
-   
-      def fw_sig_api_key
-        params[:fw_sig_api_key]
-      end  
-   
-      def fw_sig_url
-        params[:fw_sig_url]
-      end  
-   
-      def fw_sig
-        params[:fw_sig]
-      end  
-   
-      def fw_sig_user
-        params[:fw_sig_user]
-      end  
-   
-      def fw_sig_width
-        params[:fw_sig_width]
-      end  
-   
-      def fb_sig_network
-        params[:fb_sig_network]
+      [:fw_sig, :fw_sig_site, :fw_sig_is_admin, :fw_sig_permission_level, :fw_sig_session_key, :fw_sig_tier, :fw_sig_permissions, :fw_sig_time, :fw_sig_api_key, 
+       :fw_sig_url, :fw_sig, :fw_sig_user, :fw_sig_width, :fw_sig_social, :fb_sig_network].each do |fw_param|
+         module_eval( "def #{fw_param.to_s}() params[:#{fw_param.to_s}] end" )
       end
-      
+               
       # Some basic useful methods
       def webs_admin_mode?
         fw_sig_is_admin == '1'
@@ -100,6 +49,10 @@ module Webs
         fw_sig_permissions && webs_permission == Permission::ANYONE
       end
       
+      def webs_social?
+        fw_sig_social == '1'
+      end
+      
       def webs_site_owner_or_admin?
         webs_admin? || webs_owner?
       end
@@ -112,8 +65,10 @@ module Webs
       # defined in a global var, usually in the respective env file, however APP_NAME should be moved to something
       # more elegant in the future.
       def webs_app_url
-        raise "fw_app_url requires that the constant APP_NAME is defined.. for now..." if !defined?(APP_NAME)
-        "#{fw_sig_url}apps/#{APP_NAME}"
+        app_name = APP_NAME if defined?(APP_NAME)
+        app_name ||= Webs::APP_NAME if defined?(Webs::APP_NAME)
+        raise "fw_app_url requires that the constant APP_NAME is defined.. for now..." if app_name.blank?
+        "#{fw_sig_url}apps/#{app_name}"
       end
     end
   end

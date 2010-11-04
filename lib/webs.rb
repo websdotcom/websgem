@@ -8,6 +8,7 @@ module Webs
   VERSION = "0.1.5".freeze
 
   module Permission
+    DISABLED = -1
     ANYONE = 0
     LIMITED = 1
     MEMBERS = 2
@@ -15,5 +16,6 @@ module Webs
     OWNER = 4
     ADMIN = 5
   end
+  
 end
 
