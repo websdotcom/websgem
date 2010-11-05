@@ -65,9 +65,8 @@ module Webs
       # defined in a global var, usually in the respective env file, however APP_NAME should be moved to something
       # more elegant in the future.
       def webs_app_url
-        app_name = APP_NAME if defined?(APP_NAME)
-        app_name ||= Webs::APP_NAME if defined?(Webs::APP_NAME)
-        raise "fw_app_url requires that the constant APP_NAME is defined.. for now..." if app_name.blank?
+        app_name = webs_appenv_name
+        raise "webs_app_url requires that the constant APP_NAME is defined.. for now..." if app_name.blank?
         "#{fw_sig_url}apps/#{app_name}"
       end
     end

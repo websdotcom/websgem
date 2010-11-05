@@ -11,6 +11,25 @@ module Webs
           helper Webs::Helper::Tags
           include Webs::Helper::Params
           include Webs::Helper::Tags
+          helper_method :webs_app_name
+          helper_method :webs_appenv_name
+        end
+      end
+      
+      def webs_app_name
+        app_name = APP_NAME if defined?(APP_NAME)
+        app_name ||= Webs::APP_NAME if defined?(Webs::APP_NAME)
+      end
+
+      def webs_appenv_name
+        unless defined?(Webs::USE_ENV_IN_APPNAME) && Webs::USE_ENV_IN_APPNAME == false
+          suffix = Rails.env
+          suffix = {'development' => 'dev', 'beta'=>'qa' }[suffix] || suffix
+          suffix = nil if suffix == 'production'
+          
+          "#{webs_app_name}#{'.'+suffix if !suffix.nil?}"
+        else
+          webs_app_name
         end
       end
 
