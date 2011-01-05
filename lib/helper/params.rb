@@ -2,7 +2,7 @@ module Webs
   module Helper
     module Params
       [:fw_sig, :fw_sig_site, :fw_sig_is_admin, :fw_sig_permission_level, :fw_sig_session_key, :fw_sig_tier, :fw_sig_permissions, :fw_sig_time, :fw_sig_api_key, 
-       :fw_sig_url, :fw_sig, :fw_sig_user, :fw_sig_width, :fw_sig_social, :fb_sig_network].each do |fw_param|
+       :fw_sig_url, :fw_sig, :fw_sig_user, :fw_sig_width, :fw_sig_social, :fw_sig_premium, :fb_sig_network].each do |fw_param|
          module_eval( "def #{fw_param.to_s}() params[:#{fw_param.to_s}] end" )
       end
                
@@ -34,27 +34,31 @@ module Webs
       end
 
       def webs_admin?
-        fw_sig_permissions && webs_permission == Permission::ADMIN
+        webs_permission == Permission::ADMIN
       end
       
       def webs_owner?
-        fw_sig_permissions && webs_permission == Permission::MODERATORS
+        webs_permission == Permission::OWNER
       end
       
       def webs_contributor?
-        fw_sig_permissions && webs_permission == Permission::LIMITED
+        webs_permission == Permission::MEMBERS
       end
       
       def webs_moderator?
-        fw_sig_permissions && webs_permission == Permission::ANYONE
-      end
-      
-      def webs_social?
-        fw_sig_social == '1'
+        webs_permission == Permission::MODERATORS
       end
       
       def webs_site_owner_or_admin?
         webs_admin? || webs_owner?
+      end
+      
+      def fw_sig_premium?
+        fw_sig_premium == '1'
+      end
+      
+      def webs_social?
+        fw_sig_social == '1'
       end
       
       def webs_params

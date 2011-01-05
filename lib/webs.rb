@@ -5,7 +5,7 @@ require dir + 'helper/params'
 require dir + 'helper/tags'
 
 module Webs
-  VERSION = "0.1.7".freeze
+  VERSION = "0.1.9".freeze
 
   module Permission
     DISABLED = -1
