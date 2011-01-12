@@ -1,0 +1,38 @@
+<h1>Webs Info</h1>
+<table >
+  <% Webs::Helper::Params::FW_PARAMS.collect{|p| p.to_s}.sort.each do |fw_param| %>
+    <tr>
+      <td><%= fw_param %></td>
+      <td><%= eval fw_param %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>webs_app_url</td>
+    <td><a href="<%= webs_app_url %>" target="_blank"><%= webs_app_url %></a></td>
+  </tr>  
+  <% %w[webs_app_name 
+        webs_appenv_name
+        webs_site_id 
+        webs_sitebuilder? 
+        webs_admin_owner? 
+        webs_admin_owner_sitebuilder? 
+        webs_premium?
+        webs_social? 
+        webs_anyone?
+        webs_anonymous?
+        webs_limited?
+        webs_member?
+        webs_moderator?
+        webs_admin?
+        webs_owner?
+        webs_disabled? ].each do |p| %>
+    <tr>
+      <td><%= p %></td>
+      <td><%= eval p %></td>
+    </tr>
+  <% end %>
+  
+</table>
+
+<%#
+%>

@@ -1,64 +1,70 @@
 module Webs
   module Helper
     module Params
-      [:fw_sig, :fw_sig_site, :fw_sig_is_admin, :fw_sig_permission_level, :fw_sig_session_key, :fw_sig_tier, :fw_sig_permissions, :fw_sig_time, :fw_sig_api_key, 
-       :fw_sig_url, :fw_sig, :fw_sig_user, :fw_sig_width, :fw_sig_social, :fw_sig_premium, :fb_sig_network].each do |fw_param|
+      FW_PARAMS = [:fw_sig, :fw_sig_site, :fw_sig_is_admin, :fw_sig_permission_level, :fw_sig_session_key, :fw_sig_tier, :fw_sig_permissions, :fw_sig_time, :fw_sig_api_key, 
+       :fw_sig_url, :fw_sig_user, :fw_sig_width, :fw_sig_social, :fw_sig_premium, :fb_sig_network]
+       
+      FW_PARAMS.each do |fw_param|
          module_eval( "def #{fw_param.to_s}() params[:#{fw_param.to_s}] end" )
       end
                
       # Some basic useful methods
-      def webs_admin_mode?
+      def webs_sitebuilder?
         fw_sig_is_admin == '1'
       end
       
-      def webs_permission
-        case fw_sig_permissions
-          when /admin/i
-            Permission::ADMIN
-          when /owner/i
-            Permission::OWNER
-          when /moderator/i
-            Permission::MODERATORS
-          when /contributor/i
-            Permission::MEMBERS
-          when /limited/i
-            Permission::LIMITED
-          else
-            Permission::ANYONE
-        end
+      def webs_anyone?
+        fw_sig_permission_level == Webs::PermissionLevel[:anyone].to_s
       end
       
-      # does fw_sig_permissions contain at least perm
-      def webs_permission?( perm=Permission::ANYONE )
-        webs_permission >= perm
-      end
-
-      def webs_admin?
-        webs_permission == Permission::ADMIN
+      #TODO: is this same as anyone and can we ditch the -255??
+      def webs_anonymous?
+        fw_sig_permission_level == Webs::PermissionLevel[:none].to_s
       end
       
-      def webs_owner?
-        webs_permission == Permission::OWNER
+      def webs_limited?
+        fw_sig_permission_level == Webs::PermissionLevel[:limited].to_s
       end
       
-      def webs_contributor?
-        webs_permission == Permission::MEMBERS
+      def webs_member?
+        fw_sig_permission_level == Webs::PermissionLevel[:member].to_s
       end
       
       def webs_moderator?
-        webs_permission == Permission::MODERATORS
+        fw_sig_permission_level == Webs::PermissionLevel[:moderator].to_s
       end
       
-      def webs_site_owner_or_admin?
-        webs_admin? || webs_owner?
+      def webs_admin?
+        fw_sig_permission_level == Webs::PermissionLevel[:admin].to_s
       end
       
-      def fw_sig_premium?
+      def webs_owner?
+        fw_sig_permission_level == Webs::PermissionLevel[:owner].to_s
+      end
+      
+      #TODO: Also need to check the java??
+      def webs_disabled?
+        fw_sig_permission_level == Webs::PermissionLevel[:disabled].to_s
+      end
+      
+      def webs_premium?
         fw_sig_premium == '1'
       end
       
       def webs_social?
         fw_sig_social == '1'
+      end
+      
+      def webs_admin_owner_sitebuilder?
+        webs_admin? || webs_owner? || webs_sitebuilder?
+      end
+      
+      def webs_admin_owner?
+        webs_admin? || webs_owner?
+      end
+      
+      def webs_site_id
+        fw_sig_site.to_i if !fw_sig_site.blank?
       end
       
       def webs_params

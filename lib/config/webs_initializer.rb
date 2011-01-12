@@ -4,7 +4,9 @@ module Webs
   # additionally check the webs_config.yml which should support overriding for dev & test environments
   # by adding a 'development.webs_config.yml" file.
   def self.webs_config &block
-    config = YAML.load( ERB.new( File.read("#{Rails.root}/config/webs_config.yml") ).result )[Rails.env]
+#    load_constants
+    
+    config = YAML.load( ERB.new( File.read("#{Rails.root.to_s}/config/webs_config.yml") ).result )[Rails.env]
     
     # CREATE CONSTANTS FOR EACH KEY
     config.each_key { |k| self.const_set(k.to_s.upcase, config[k]) }

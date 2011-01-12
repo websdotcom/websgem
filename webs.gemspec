@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{webs}
-  s.version = "0.1.9"
+  s.version = "0.1.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chuck Olczak"]
@@ -12,10 +12,16 @@ Gem::Specification.new do |s|
   gemfiles = [
       "README.rdoc", 
       "lib/webs.rb",  
+      "lib/cache/cache.rb", 
+      "lib/config/webs_constants.rb", 
       "lib/config/webs_initializer.rb", 
       "lib/controller/webs_controller.rb", 
+      "lib/helper/application.rb", 
       "lib/helper/params.rb", 
       "lib/helper/tags.rb", 
+      "lib/views/layouts/webs_page.html.erb", 
+      "lib/views/layouts/webs_utility.html.erb", 
+      "lib/views/shared/_webs_info.html.erb" 
   ]
   s.extra_rdoc_files = gemfiles
   s.files = gemfiles + [ "Rakefile", "webs.gemspec" ]

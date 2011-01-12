@@ -1,0 +1,8 @@
+<%= fwml :utility, :title=>@page_title do %>
+  <fw:head>
+    <%= javascript_include_tag 'application' %>
+    <%= stylesheet_link_tag 'styles' %>
+    <%= yield :fw_head %>
+  </fw:head>
+  <%= yield %>
+<% end %>

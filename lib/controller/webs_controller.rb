@@ -1,4 +1,6 @@
 module Webs
+  mattr_accessor :app_name
+  
   module Controller
     module WebsController
       def self.included(base)
@@ -7,18 +9,21 @@ module Webs
   
       module ClassMethods
         def webs_helpers
+          helper Webs::Helper::Application
           helper Webs::Helper::Params
           helper Webs::Helper::Tags
+          helper Webs::Cache
           include Webs::Helper::Params
           include Webs::Helper::Tags
+          include Webs::Cache
+          helper_method :webs_site
           helper_method :webs_app_name
           helper_method :webs_appenv_name
         end
       end
       
       def webs_app_name
-        app_name = APP_NAME if defined?(APP_NAME)
-        app_name ||= Webs::APP_NAME if defined?(Webs::APP_NAME)
+        Webs::APP_NAME || APP_NAME
       end
 
       def webs_appenv_name
@@ -46,60 +51,42 @@ module Webs
         s = webs_auth_string
         Digest::MD5.hexdigest(webs_auth_string + secret)
       end
-    
-      # mappings to http://wiki.beta.freewebs.com/index.php/Fw:member-level-select
-      def webs_member_level_to_int member_level
-        {
-          'anyone'=>Webs::Permission::ANYONE,
-          'limited'=>Webs::Permission::LIMITED,
-          'member'=>Webs::Permission::MEMBERS,
-          'moderator'=>Webs::Permission::MODERATORS,
-          'admin'=>Webs::Permission::ADMIN
-        }[member_level.downcase]
-      end      
 
-      # mappings of the select value of fw:member-level-select to the old int vals
-      # TODO: convert data to new vals, don't have time right now
-      def webs_member_level_value_to_old_member_level webs_member_level
-        {
-          '-255'=>Webs::Permission::ANYONE,
-          '25'=>Webs::Permission::LIMITED,
-          '50'=>Webs::Permission::MEMBERS,
-          '75'=>Webs::Permission::MODERATORS,
-          '100'=>Webs::Permission::ADMIN,
-          '125'=>Webs::Permission::OWNER,
-          '255'=>Webs::Permission::DISABLED
-        }[webs_member_level]
+      # Examples:
+      # webs_redirect acontroller_path( @model_object )
+      # webs_redirect acontroller_path( @model_object ), :partials=>[partial1, partial2]
+      # webs_redirect :controller=>:acontroller, :flash=>'a message'
+      def webs_redirect(*args)
+        if args && args[0] && args[0].class.to_s =~ /String/
+          url = args[0]
+          options = args[1]
+        else
+          options = args[0]
+        end  
+    
+        if options.class.to_s =~ /Hash/
+          partials = options.delete(:partials)
+        end
+        
+        message = options.delete(:flash)
+        flash[:notice] = message if !message.blank?
+        
+        url = url_for( options.merge(:only_path=>true) ) if url.blank?
+    
+        render_text = %(<fw:redirect url="#{url}">#{partials.collect{ |p| render_to_string :partial=>p } if partials && partials.any?}Redirecting, please wait...</fw:redirect>)
+        Rails.logger.debug render_text
+        render :text => render_text
       end
 
-      def webs_int_to_member_level n
-        {
-          Webs::Permission::DISABLED=>'disabled',
-          Webs::Permission::ANYONE=>'anyone',
-          Webs::Permission::LIMITED=>'limited',
-          Webs::Permission::MEMBERS=>'member',
-          Webs::Permission::MODERATORS=>'moderator',
-          Webs::Permission::ADMIN=>'admin',
-          Webs::Permission::OWNER=>'admin'
-        }[n]
-      end      
-
-      # converts level which is an int for the select options of a fw:member-level-select
-      # first to an associated Webs::Permission then to a blog member level
-      # TODO: This should be cleaned up and blogs should use the fw:member-level-select values
-      # the mapping is useful if you need to change the result, generally sending returning admin if owner
-      # since most of the apps use owner not admin
-      # The generally needs to be done in params since some objects contain validations
-      # example: 
-      #  convert_webs_member_level( params[:entries], :view_level, {Webs::Permission::ADMIN=>Webs::Permission::OWNER} )
-      #  will take a webs member-level-select and convert it to a  Webs::Permission mapping ADMIN to OWNER
-      def convert_webs_member_level h, key, mapping={}
-        return if h.nil?
-        v = webs_member_level_value_to_old_member_level( h[key] )
-        h[key] = mapping[v] || v
+      def webs_info
+        render :partial=>'shared/webs_info'
       end
 
       # FILTERS
+      def set_page_title
+        @title = Webs::app_title
+      end
+      
       def validate_webs_session
         render :text => "Access Denied: Webs::SECRET not defined." and return(false) unless defined?( Webs::SECRET )
         render :text => "Access Denied" and return(false) unless fw_sig == webs_auth( Webs::SECRET )
@@ -113,6 +100,36 @@ module Webs
         render(:text => "You are not authorized.") unless webs_admin?
       end
       
+      def webs_site
+        @webs_site
+      end
+      
+      # options include primary_key_col
+      def load_site_model modelname, options={}
+        Rails.logger.debug "load_site_model #{modelname} #{options.inspect}"
+        model = modelname.constantize
+        pk = options.delete(:primary_key_col)
+        if pk
+          @webs_site = model.find( :first, :conditions=>{ pk=>webs_site_id } )
+        else
+          @webs_site = model.find( webs_site_id )
+        end
+          
+        rescue
+          Rails.logger.debug "!!!!!!!!!!!!!!!!!!! load_site_model Failed"
+          nil
+      end
+      
+      def log_fw_params
+        Rails.logger.debug "FW_PARAMS={"
+        Rails.logger.debug params.select{ |k,v| k.starts_with?("fw_sig_") }.sort.collect { |k,v| "  :#{k}=>'#{v}'" }.join(",\n")
+        Rails.logger.debug "}"
+      end
+      
+      # Usefull for debugging, set FW_PARAMS in development.rb and you can see the raw html in a browser
+      def set_fw_params
+        params.merge!( FW_PARAMS ) if defined?( FW_PARAMS )
+      end
     end
   end
 end
