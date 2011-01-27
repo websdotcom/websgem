@@ -110,7 +110,6 @@ module Webs
       
       # options include primary_key_col
       def load_site_model modelname, options={}
-        Rails.logger.debug "load_site_model #{modelname} #{options.inspect}"
         model = modelname.constantize
         pk = options.delete(:primary_key_col)
         if pk
@@ -120,7 +119,6 @@ module Webs
         end
           
         rescue
-          Rails.logger.debug "!!!!!!!!!!!!!!!!!!! load_site_model Failed"
           nil
       end
       
