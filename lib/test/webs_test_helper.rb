@@ -16,7 +16,16 @@ module Webs
       fw_test_params options.merge( :fw_sig_is_admin=>'1' )
     end
     
+    def fw_test_scenarios options={}
+      scenarios = []
+      fw_param_permuter( options ){ |params| scenarios << params }
+      scenarios
+    end
+    
     # Permute: is_admin, permission_level, tier, social & premium
+    # fw_param_permuter( :only=>[:fw_sig_is_admin, :fw_sig_social, :fw_sig_permission_level] )
+    # fw_param_permuter( :except=>[:fw_sig_tier, :fw_sig_premium]} )
+    # fw_param_permuter( :vals=>{:test=>['a', 'b', 'c'] )
     def fw_param_permuter options={}, &block
       param_vals = {
         :fw_sig_is_admin=>[0,1],
@@ -25,13 +34,25 @@ module Webs
         :fw_sig_premium=>[0,1],
         :fw_sig_tier=>[0,1,2,3]
       }
+
+      if (only = options.delete(:only))
+        param_vals.keys.each { |k| param_vals.delete(k) if !only.include?(k)}
+      end
+      if (except = options.delete(:except))
+        param_vals.keys.each { |k| param_vals.delete(k) if except.include?(k)}
+      end
+      
+      if (vals = options.delete(:vals))
+        param_vals.merge!( vals ) 
+      end
+
       params = fw_test_params( options ) 
       permute_params params, param_vals, block
     end
     
     def permute_params params, h_vals, block
       if h_vals.size == 0
-        block.call( params )
+        block.call( params.clone )
       else
         k = h_vals.keys.first
         vals = h_vals.delete(k)
