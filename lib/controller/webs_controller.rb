@@ -100,6 +100,10 @@ module Webs
         render(:text => "You are not authorized.") unless webs_admin?
       end
       
+      def require_sitebuilder
+        render( :text => "You are not an admin.", :status=>403 ) unless webs_sitebuilder?
+      end
+      
       def webs_site
         @webs_site
       end

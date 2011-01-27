@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
       "lib/helper/tags.rb", 
       "lib/views/layouts/webs_page.html.erb", 
       "lib/views/layouts/webs_utility.html.erb", 
+      "lib/test/webs_test_helper.rb", 
       "lib/views/shared/_webs_info.html.erb" 
   ]
   s.extra_rdoc_files = gemfiles
