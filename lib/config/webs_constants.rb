@@ -53,11 +53,11 @@ module Webs
       value_for_level( k ) >= v
     end
   end
-  
+
   module CommentsOrder
-    ASC   = 0
-    DESC  = 1
-    VIEWS = [[ASC, "Oldest first (default)"], [DESC, "Newest first"]]
+    DESC  = 0
+    ASC   = 1
+    VIEWS = [[DESC, "Newest first (default)"], [ASC, "Oldest first"]]
     SELECT_OPTIONS = VIEWS.map { |val, disp| [disp, val] }
     VAL_LIST  = VIEWS.map {|val, disp| val}
     def self.val_to_str(val)
