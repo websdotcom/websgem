@@ -3,7 +3,6 @@
     <%= javascript_include_tag 'application' %>
     <%= stylesheet_link_tag 'styles' %>
     <%= yield :fw_head %>
-    <div class="clear"></div>
   </fw:head>
 
   <fw:paragraph>
@@ -12,7 +11,7 @@
         <%= raw( %(<fw:page-title path='/' />) ) %>
         <%= yield :fw_title %>
       </span>
-      <div class="clear"></div>
+      <div class="clear clear_head"></div>
     </fw:title>
   
     <%= yield %>  

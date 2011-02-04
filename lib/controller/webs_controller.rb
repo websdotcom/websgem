@@ -18,6 +18,7 @@ module Webs
           include Webs::Cache
           helper_method :webs_site
           helper_method :webs_app_name
+          helper_method :webs_permapath
           helper_method :webs_appenv_name
         end
       end
@@ -36,6 +37,10 @@ module Webs
         else
           webs_app_name
         end
+      end
+
+      def webs_permapath
+        @permapath
       end
 
       def webs_query_string
@@ -87,6 +92,15 @@ module Webs
         @title = Webs::app_title
       end
       
+      def set_webs_permapath pp=nil
+        @permapath = pp
+        if @permapath.nil?
+          path = request.env["REQUEST_PATH"]
+          @permapath = path.blank? ? "/" : path.sub(/-[^-]*$/, '')
+        end
+        @permapath
+      end
+
       def validate_webs_session
         render :text => "Access Denied: Webs::SECRET not defined." and return(false) unless defined?( Webs::SECRET )
         render :text => "Access Denied" and return(false) unless fw_sig == webs_auth( Webs::SECRET )
