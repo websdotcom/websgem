@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{webs}
-  s.version = "0.1.14"
+  s.version = "0.1.15"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chuck Olczak"]
-  s.date = %q{2011-02-04}
+  s.date = %q{2011-02-09}
   s.description = %q{Reusable webs stuff.}
   s.email = %q{chuck@webs.com}
   gemfiles = [
@@ -16,6 +16,8 @@ Gem::Specification.new do |s|
       "lib/config/webs_constants.rb", 
       "lib/config/webs_initializer.rb", 
       "lib/controller/url_for_context_path.rb", 
+      "lib/controller/alive_controller.rb", 
+      "lib/controller/info_controller.rb", 
       "lib/controller/webs_controller.rb", 
       "lib/helper/application.rb", 
       "lib/helper/params.rb", 
