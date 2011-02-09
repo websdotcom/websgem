@@ -83,10 +83,6 @@ module Webs
         render :text => render_text
       end
 
-      def webs_info
-        render :partial=>'shared/webs_info'
-      end
-
       # FILTERS
       def set_page_title
         @title = Webs::app_title
@@ -102,8 +98,8 @@ module Webs
       end
 
       def validate_webs_session
-        render :text => "Access Denied: Webs::SECRET not defined." and return(false) unless defined?( Webs::SECRET )
-        render :text => "Access Denied" and return(false) unless fw_sig == webs_auth( Webs::SECRET )
+        render( :text => "Access Denied: Webs::SECRET not defined.", :status=>403 ) and return(false) unless defined?( Webs::SECRET )
+        render( :text => "Access Denied", :status=>403 ) and return(false) unless fw_sig == webs_auth( Webs::SECRET )
       end
       
       def require_webs_user
@@ -111,7 +107,7 @@ module Webs
       end
       
       def require_webs_admin
-        render(:text => "You are not authorized.") unless webs_admin?
+        render( :text => "You are not authorized.", :status=>403 ) unless webs_admin?
       end
       
       def require_sitebuilder
