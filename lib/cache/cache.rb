@@ -13,8 +13,15 @@ module Webs
     end
     
     def cache_block(key, options=nil, &block)
+      Rails.logger.debug "*********** cache_block(#{key}, #{options.inspect if options} )" if debug
       return if key.nil?
-      unless data = Webs.cache.read(key)
+      
+      if Webs.cache.respond_to?( 'read' )
+        data = Webs.cache.read(key)
+      else
+        data = Webs.cache[ key ]
+      end
+      unless data
         if self.respond_to?('capture')
           data = capture(&block) # called from view
         else
@@ -26,7 +33,11 @@ module Webs
         # should get almost 10:1 compression ratio. This will be key for caching pages & fragments
         if block_size < 1.megabyte
           Rails.logger.debug "*********** cache_block[#{block_size}](#{key}, #{data} )" if debug
-          Webs.cache.write(key, data)
+          if Webs.cache.respond_to?( 'write' )
+            Webs.cache.write(key, data)
+          else
+            Webs.cache[ key ] = data
+          end
         else
           Rails.logger.debug "*********** block not cached since exceeds 3M @ #{block_size} )" if debug
         end
@@ -35,7 +46,7 @@ module Webs
       end
       data
     rescue Exception => e
-      Rails.logger.error "------------------------------------------------\nmemcache_error: #{e.message}"
+      Rails.logger.error "------------------------------------------------\nmemcache_error: #{e.message}, #{e.backtrace.join("\n")}"
       data
     end
   end
