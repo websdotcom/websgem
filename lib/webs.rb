@@ -7,7 +7,7 @@ require dir + 'helper/params'
 require dir + 'helper/tags'
 
 module Webs
-  VERSION = '0.1.17'.freeze
+  VERSION = '0.1.18'.freeze
 
 #  def self.load_constants
     # s = File.read("#{Pathname(__FILE__).dirname.expand_path}/config/webs_constants.yml")
