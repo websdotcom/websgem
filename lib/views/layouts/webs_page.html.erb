@@ -8,9 +8,13 @@
   <fw:paragraph>
     <fw:title>
       <span style="float:left" class="pageTitle">
-        <%= raw( %(<fw:page-title path='/' />) ) %>
-        <%= yield :fw_title %>
+        <% if @title %>
+          <%= @title %>
+        <% else %>
+          <%= raw( %(<fw:page-title path='/' />) ) %>
+        <% end %>
       </span>
+      <%= yield :fw_title %>
       <div class="clear clear_head"></div>
     </fw:title>
   
