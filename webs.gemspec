@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
       "lib/helper/application.rb", 
       "lib/helper/params.rb", 
       "lib/helper/tags.rb", 
+      "lib/middleware/parameter_fixer.rb", 
       "lib/views/layouts/webs_page.html.erb", 
       "lib/views/layouts/webs_utility.html.erb", 
       "lib/test/webs_test_helper.rb", 
