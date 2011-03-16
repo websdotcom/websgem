@@ -69,6 +69,7 @@ module Webs
           options = args[0]
         end  
     
+        options ||= {}
         if options.class.to_s =~ /Hash/
           partials = options.delete(:partials)
         end
@@ -89,12 +90,7 @@ module Webs
       end
       
       def set_webs_permapath pp=nil
-        @permapath = pp
-        if @permapath.nil?
-          path = request.env["REQUEST_PATH"]
-          @permapath = path.blank? ? "/" : path.sub(/-[^-]*$/, '')
-        end
-        @permapath
+        @permapath = pp || request.env["REQUEST_PATH"] || "/"
       end
 
       def validate_webs_session
