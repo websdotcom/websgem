@@ -86,7 +86,7 @@ module Webs
 
       # FILTERS
       def set_page_title
-        @title = Webs::app_title
+        @title = @page_title = Webs::app_title
       end
       
       def set_webs_permapath pp=nil
@@ -103,7 +103,7 @@ module Webs
       end
       
       def require_webs_admin
-        render( :text => "You are not authorized.", :status=>403 ) unless webs_admin?
+        render( :text => "You are not authorized.", :status=>403 ) unless webs_admin_owner?
       end
       
       def require_sitebuilder

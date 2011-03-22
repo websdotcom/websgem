@@ -35,6 +35,14 @@ module Webs
           [ lvl[:value], names[lvl_key] || lvl[:name] ]
         end
       end
+
+      def webs_page_settings options = {}
+        options.keys.each do |k| 
+          val = options[k]
+          val = h(val)
+          self.instance_variable_set("@#{k.to_s}".to_sym, val) 
+        end
+      end
     end
   end
 end
