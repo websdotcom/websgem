@@ -43,6 +43,12 @@ module Webs
           self.instance_variable_set("@#{k.to_s}".to_sym, val) 
         end
       end
+
+      def breaking_wrap( s, max_width=5 )
+        return s if s.blank? || s.length < max_width
+        r = Regexp.new( ".{1,#{max_width}}" )
+        s.scan(r).join("<wbr>")
+      end
     end
   end
 end
