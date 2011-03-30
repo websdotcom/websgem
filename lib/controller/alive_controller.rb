@@ -10,7 +10,7 @@ class Webs::AliveController < ActionController::Base
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
 
     # Only force down if calling from localhost
-    render( :text=>'OK' ) and return unless Webs.cache
+    render( :text=>"#{Webs::APP_NAME.capitalize} OK" ) and return unless Webs.cache
 
     server_down = fetch_server_down
     if request.local?
@@ -26,7 +26,7 @@ class Webs::AliveController < ActionController::Base
     if server_down
       render :text=>"Server is going down!", :status=>503 
     else
-      render :text=>'OK'
+      render :text=>"#{Webs::APP_NAME.capitalize} OK"
     end
   end
 
