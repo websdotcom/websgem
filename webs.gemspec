@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{webs}
-  s.version = "0.1.23"
+  s.version = "0.1.24"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chuck Olczak"]
-  s.date = %q{2011-03-30}
+  s.date = %q{2011-04-12}
   s.description = %q{Reusable webs stuff.}
   s.email = %q{chuck@webs.com}
   gemfiles = [
