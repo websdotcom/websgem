@@ -138,15 +138,6 @@ module Webs
       def set_fw_params
         params.merge!( FW_PARAMS ) if defined?( FW_PARAMS )
       end
-      
-      # NOTE: bots & perl scripts are getting bad format in the request headers
-      # generally in the form: :formats=>["charset=iso-8859-1"] 
-      # Just force those to html
-      # ex: https://freewebs.hoptoadapp.com/errors/4334788 
-      # ex mime type inspection: #<Mime::Type:0x765a7159 @synonyms=[], @string="charset=iso-8859-1", @symbol=nil> 
-      def fix_request_format
-        request.format = :html if request.format.blank? || request.format.to_s =~ /^charset/i
-      end
     end
   end
 end
