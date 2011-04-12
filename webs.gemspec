@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
       "lib/cache/cache.rb", 
       "lib/config/webs_constants.rb", 
       "lib/config/webs_initializer.rb", 
+      "lib/config/initializers/http_accept_patch.rb", 
       "lib/controller/url_for_context_path.rb", 
       "lib/controller/alive_controller.rb", 
       "lib/controller/info_controller.rb", 
