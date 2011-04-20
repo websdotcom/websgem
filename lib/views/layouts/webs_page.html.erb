@@ -13,6 +13,7 @@
         <% else %>
           <%= raw( %(<fw:page-title path='/' />) ) %>
         <% end %>
+        <%= yield :fw_page_title %>
       </span>
       <%= yield :fw_title %>
       <div class="clear clear_head"></div>

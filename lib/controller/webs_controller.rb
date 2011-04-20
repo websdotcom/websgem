@@ -79,7 +79,15 @@ module Webs
         
         url = url_for( options.merge(:only_path=>true) ) if url.blank?
     
-        render_text = %(<fw:redirect url="#{url}">#{partials.collect{ |p| render_to_string :partial=>p } if partials && partials.any?}Redirecting, please wait...</fw:redirect>)
+        render_text = %[<fw:redirect url="#{url}">Redirecting, please wait...]
+        if partials && partials.any?
+          partials.each do |p| 
+            p = render_to_string( :partial=>p ) 
+            Rails.logger.debug "************ PARTIAL=> #{p}"
+            render_text += p 
+          end
+        end
+        render_text += %[</fw:redirect>]
         Rails.logger.debug render_text
         render :text => render_text
       end

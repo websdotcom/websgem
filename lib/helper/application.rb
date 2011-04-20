@@ -44,6 +44,35 @@ module Webs
         end
       end
 
+      # break text every col
+      def text_breaking_wrap(txt, col = 80)
+        return nil if txt.blank?
+        txt.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "\\1\\3 ")
+      end
+      
+      # break text every col respecting tags
+      def html_breaking_wrap(html, col=80)
+        # Breakup the string by html tags
+        tag_regex = /<\/?[^>]*>/
+        if html && html =~ tag_regex
+          # Breakup the string by html tags
+          ss = StringScanner.new( html )
+          a = []
+          while ( ss.scan_until(tag_regex) )
+            a << ss.pre_match if !ss.pre_match.blank?
+            a << ss.matched 
+            ss = StringScanner.new( ss.rest ) 
+          end
+          a << ss.rest if ss.rest?
+          
+          # For each non-tag break long words
+          a.collect{ |s| s[0..0]=='<' ? s : text_breaking_wrap(s, col) }.join
+        else
+          text_breaking_wrap(html, col) 
+        end
+      end
+  
+      # Great for all browsers but opera, but doesn't work in fw:sanitize
       def breaking_wrap( s, max_width=5 )
         return s if s.blank? || s.length < max_width
         r = Regexp.new( ".{1,#{max_width}}" )
