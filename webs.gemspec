@@ -28,6 +28,8 @@ Gem::Specification.new do |s|
       "lib/views/layouts/webs_utility.html.erb", 
       "lib/test/webs_test_helper.rb", 
       "lib/views/shared/_webs_info.html.erb" 
+      "lib/views/shared/_webs_info.html.erb" 
+      "lib/views/shared/_jquery_noconflict.html.erb" 
   ]
   s.extra_rdoc_files = gemfiles
   s.files = gemfiles + [ "Rakefile", "webs.gemspec" ]
