@@ -3,6 +3,9 @@
     <%= javascript_include_tag 'application' %>
     <%= stylesheet_link_tag 'styles' %>
     <%= yield :fw_head %>
+    <% if @jquery_noconflict %>
+      <%= render :partial=>'shared/jquery_noconflict' %>
+    <% end %>
   </fw:head>
 
   <fw:paragraph>
@@ -21,4 +24,6 @@
   
     <%= yield %>  
   </fw:paragraph>
+
+  <%= yield :fw_after %>
 <% end %>

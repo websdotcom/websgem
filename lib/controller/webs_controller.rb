@@ -83,7 +83,7 @@ module Webs
         if partials && partials.any?
           partials.each do |p| 
             p = render_to_string( :partial=>p ) 
-            Rails.logger.debug "************ PARTIAL=> #{p}"
+#            Rails.logger.debug "************ PARTIAL=> #{p}"
             render_text += p 
           end
         end
