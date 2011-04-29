@@ -30,7 +30,7 @@ module Webs
         else
           data = yield
         end
-        Rails.logger.debug "****OFF**** cache_block(#{key})"
+        Rails.logger.debug "****OFF**** cache_block(#{key})" if debug
         return data
       end
       

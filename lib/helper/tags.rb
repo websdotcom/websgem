@@ -3,7 +3,7 @@ module Webs
     module Tags
       def fwml tagname, options={}, &block
 #        Rails.logger.debug "****** fwml #{tagname} #{options.inspect}"
-        if ['sanitize', 'wizzywig'].include?(tagname.to_s)
+        if ['sanitize', 'wizzywig', 'intl'].include?(tagname.to_s)
           self.send( "fw_#{tagname}", options, &block )
         else
           return inline_tag( tagname, options ) unless block
@@ -40,7 +40,49 @@ module Webs
       # fw_wizzywig should never be called with a block the text is passed in via text
       def fw_wizzywig options={}
         wizzywig_text = options.delete( :wizzywig_text )
-        "<fw:wizzywig #{html_options(options)}><![CDATA[#{wizzywig_text}]]></fw:wizzywig>"
+        "<fw:wizzywig #{html_options(options)}><![CDATA[#{wizzywig_text}]]></fw:wizzywig>".html_safe
+      end
+      
+      # can take an option: :tokens which is a hash for replacement and will add in the appropriate fw:intl-token tags 
+      # ex: 
+      #  <%= fwml :intl, :description=>"bogus", :tokens=>{ :tier=>"Tier 1", :image_limit=>"10", :upgrade_link=>"www.blah.com" } do %>
+      #    As a {tier} member, each of your products can have a maximum of {image_limit}.
+      #    Need more? Time to upgrade!
+      #    {upgrade_link}
+      #  <% end %>
+      #
+      #  Should Yield:
+      #
+      #  <fw:intl description="bogus">
+      #    As a {tier} member, each of your products can have a maximum of {image_limit}.
+      #    Need more? Time to upgrade!
+      #    {upgrade_link}
+      #    <fw:intl-token name="tier">Tier 1</fw:intl-token> 
+      #    <fw:intl-token name="image_limit">10</fw:intl-token>
+      #    <fw:intl-token name="upgrade_link">www.blah.com</fw:intl-token>
+      #  </fw:intl>
+      #
+      # You should also be able to use it without a body, so this should work:
+      # <% rubystring = 'hello world' %>
+      # <%= fwml :intl, :value=rubystring %>
+      # 
+      # Should Yield
+      #
+      # <fw:intl>hello world</fw:intl>
+      #
+      def fw_intl options={}, &block
+
+        value = options.delete( :value)
+        tokens = options.delete( :tokens )
+        if block
+          tag = render_tag_with_block 'intl', options, false, &block
+          
+          idx = tag.length - 10
+          token_str = tokens.keys.collect{ |k| %[<fw:intl-token name="#{k}">#{tokens[k]}</fw:intl-token>] }.join( "\n" )
+          (tag[0..idx-1] + token_str.html_safe + tag[idx..tag.length-1]).html_safe
+        else
+          %[<fw:intl#{html_options(options)}>#{h value}</fw:intl>].html_safe
+        end
       end
     end
   end
