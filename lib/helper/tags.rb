@@ -47,7 +47,7 @@ module Webs
         output.safe_concat("</fw:#{tagname}>")
       end
       
-      def inline_tag tagname, attributes = nil, options
+      def inline_tag( tagname, attributes, options={} )
         if attributes
           "<fw:#{tagname}#{html_options(options)}></fw:#{tagname}>"
         else
