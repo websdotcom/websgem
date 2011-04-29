@@ -1,14 +1,34 @@
 module Webs
   module Helper
     module Tags
+      # Examples: 
+      #
+      # <%= fwml( :blah, :fw_attributes=>{:value=>fwml( :name, :uid=>'xxx') } ) do %>HELLO<% end %>
+      # 
+      # Renders:
+      #
+      # <fw:blah>HELLO<fw:fwml_attribute name="value"><fw:name uid="xxx"/></fw:fwml_attribute></fw:blah>
+
       def fwml tagname, options={}, &block
+        attributes = options.delete( :fw_attributes )
 #        Rails.logger.debug "****** fwml #{tagname} #{options.inspect}"
         if ['sanitize', 'wizzywig', 'intl'].include?(tagname.to_s)
-          self.send( "fw_#{tagname}", options, &block )
+          tag = self.send( "fw_#{tagname}", options, &block )
         else
-          return inline_tag( tagname, options ) unless block
-          render_tag_with_block tagname, options, false, &block
+          if block
+            tag = render_tag_with_block tagname, options, false, &block
+          else
+            tag = inline_tag( tagname, attributes, options )
+          end
         end
+
+        if attributes 
+          tagidx = tag.length - (tagname.length + 6)
+          attribute_str = attributes.keys.collect{ |k| %[<fw:fwml_attribute name="#{k}">#{attributes[k]}</fw:fwml_attribute>] }.join( "\n" )
+          tag = tag[0..tagidx-1] + attribute_str.html_safe + tag[tagidx..tag.length-1]
+        end
+
+        tag.html_safe 
       end
       
       private
@@ -27,8 +47,12 @@ module Webs
         output.safe_concat("</fw:#{tagname}>")
       end
       
-      def inline_tag tagname, options
-        "<fw:#{tagname}#{html_options(options)}/>"
+      def inline_tag tagname, attributes = nil, options
+        if attributes
+          "<fw:#{tagname}#{html_options(options)}></fw:#{tagname}>"
+        else
+          "<fw:#{tagname}#{html_options(options)}/>"
+        end
       end
       
       def fw_sanitize options={}, &block
