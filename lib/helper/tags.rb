@@ -12,7 +12,8 @@ module Webs
       def fwml tagname, options={}, &block
         attributes = options.delete( :fw_attributes )
 #        Rails.logger.debug "****** fwml #{tagname} #{options.inspect}"
-        if ['sanitize', 'wizzywig', 'intl'].include?(tagname.to_s)
+        tagname = tagname.to_s unless tagname.nil?
+        if ['sanitize', 'wizzywig', 'intl'].include?(tagname)
           tag = self.send( "fw_#{tagname}", options, &block )
         else
           if block
