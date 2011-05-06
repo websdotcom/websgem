@@ -25,7 +25,7 @@ module Webs
 
         if attributes 
           tagidx = tag.length - (tagname.length + 6)
-          attribute_str = attributes.keys.collect{ |k| %[<fw:fwml_attribute name="#{k}">#{attributes[k]}</fw:fwml_attribute>] }.join( "\n" )
+          attribute_str = attributes.keys.collect{ |k| %[<fw:fwml-attribute name="#{k}">#{attributes[k]}</fw:fwml-attribute>] }.join( "\n" )
           tag = tag[0..tagidx-1] + attribute_str.html_safe + tag[tagidx..tag.length-1]
         end
 
