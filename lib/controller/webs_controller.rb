@@ -153,7 +153,7 @@ module Webs
       # ex: https://freewebs.hoptoadapp.com/errors/4334788 
       # ex mime type inspection: #<Mime::Type:0x765a7159 @synonyms=[], @string="charset=iso-8859-1", @symbol=nil> 
       def fix_request_format
-        request.format = :html if request.format.blank? || request.format.to_s =~ /^charset/i
+        request.format = :html if request.format.blank? || ( request.format.to_s =~ /^charset/i || request.format.to_s =~ /^url_encoded_form/i )
       end
     end
   end
