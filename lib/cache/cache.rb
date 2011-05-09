@@ -20,6 +20,9 @@ module Webs
       else
         Webs.cache[ key ]
       end
+      rescue Exception => e
+        Rails.logger.error "------------------------------------------------\nmemcache_error: #{e.message}, #{e.backtrace.join("\n")}"
+        nil
     end
 
     def cache_block(key, options=nil, &block)
