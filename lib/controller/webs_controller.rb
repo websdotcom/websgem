@@ -144,7 +144,10 @@ module Webs
       
       # Usefull for debugging, set FW_PARAMS in development.rb and you can see the raw html in a browser
       def set_fw_params
-        params.merge!( FW_PARAMS ) if defined?( FW_PARAMS )
+        if defined?( FW_PARAMS )
+          params.merge!( FW_PARAMS ) 
+          Rails.logger.debug "************ set_fw_params PARAMS=#{params.inspect}"
+        end
       end
       
       # NOTE: bots & perl scripts are getting bad format in the request headers
