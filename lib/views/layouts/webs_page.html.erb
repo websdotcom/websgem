@@ -6,6 +6,7 @@
     <% if @jquery_noconflict %>
       <%= render :partial=>'shared/jquery_noconflict' %>
     <% end %>
+    <%= csrf_meta_tag %>
   </fw:head>
 
   <fw:paragraph>

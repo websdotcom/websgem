@@ -12,11 +12,13 @@ module Webs
   def self.app_title
     APP_NAME.titleize
   end
-  
-  class Railtie < Rails::Railtie
-    initializer 'webs_view-path' do |app|
-      path = "#{Pathname(__FILE__).dirname.expand_path}/views"
-      app.paths.app.views.push path
+ 
+  if defined?( Rails::Railtie )
+    class Railtie < Rails::Railtie
+      initializer 'webs_view-path' do |app|
+        path = "#{Pathname(__FILE__).dirname.expand_path}/views"
+        app.paths.app.views.push path
+      end
     end
   end
 end

@@ -42,18 +42,18 @@ module Webs
       nil
     end
 
-    def get_data( &block )
+    def cache_capture_data( &block )
       self.respond_to?('capture') ? capture(&block) : yield
     end
 
     def cache_block(key, options={}, &block)
       return if key.nil?
       Rails.logger.debug "*********** cache_block( #{key} )" if debug
-      return get_data( &block ) if off
+      return cache_capture_data( &block ) if off
      
       unless ( data=cache_read(key) )
         # if self responds to capture this is called from a view which means we can cache snippets
-        data = get_data( &block )
+        data = cache_capture_data( &block )
         cache_write( key.to_s, data, options )
       end
       data
@@ -71,7 +71,7 @@ module Webs
     def cache_snippet(snippet, key, options={}, &block)
       return snippet.html_safe if !snippet.blank?
       if options.delete(:ignore_cache)
-        get_data( &block )
+        cache_capture_data( &block )
       else
         cache_block( key, options, &block )
       end

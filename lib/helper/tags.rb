@@ -8,66 +8,6 @@ module Webs
       # Renders:
       #
       # <fw:blah>HELLO<fw:fwml_attribute name="value"><fw:name uid="xxx"/></fw:fwml_attribute></fw:blah>
-
-      def fwml tagname, options={}, &block
-        attributes = options.delete( :fw_attributes )
-#        Rails.logger.debug "****** fwml #{tagname} #{options.inspect}"
-        tagname = tagname.to_s unless tagname.nil?
-        if ['sanitize', 'wizzywig', 'intl'].include?(tagname)
-          tag = self.send( "fw_#{tagname}", options, &block )
-        else
-          if block
-            tag = render_tag_with_block tagname, options, false, &block
-          else
-            tag = inline_tag( tagname, attributes, options )
-          end
-        end
-
-        if attributes 
-          tagidx = tag.length - (tagname.length + 6)
-          attribute_str = attributes.keys.collect{ |k| %[<fw:fwml-attribute name="#{k}">#{attributes[k]}</fw:fwml-attribute>] }.join( "\n" )
-          tag = tag[0..tagidx-1] + attribute_str.html_safe + tag[tagidx..tag.length-1]
-        end
-
-        tag.html_safe 
-      end
-      
-      private
-      def html_options options
-        ' ' + options.each_key.select{ |k| !options[k].blank? }.collect{|k| "#{k.to_s}=\"#{options[k]}\"" }.join(' ')  if options.any?
-      end
-      
-      def render_tag_with_block tagname, options, cdata_wrapper=false, &block
-#        Rails.logger.debug "****** render_tag_with_block #{tagname} #{options.inspect} cdata=#{cdata_wrapper}"
-        content = capture(&block)
-        output = ActiveSupport::SafeBuffer.new
-        output.safe_concat("<fw:#{tagname}#{html_options(options)}>")
-        output.safe_concat("<![CDATA[") if cdata_wrapper
-        output << content  
-        output.safe_concat("]]>") if cdata_wrapper
-        output.safe_concat("</fw:#{tagname}>")
-      end
-      
-      def inline_tag( tagname, attributes, options={} )
-        if attributes
-          "<fw:#{tagname}#{html_options(options)}></fw:#{tagname}>"
-        else
-          "<fw:#{tagname}#{html_options(options)}/>"
-        end
-      end
-      
-      def fw_sanitize options={}, &block
-        cdata_wrapper = options.delete(:cdata) 
-        cdata_wrapper = true if cdata_wrapper.nil?
-        render_tag_with_block 'sanitize', options, cdata_wrapper, &block
-      end
-      
-      # fw_wizzywig should never be called with a block the text is passed in via text
-      def fw_wizzywig options={}
-        wizzywig_text = options.delete( :wizzywig_text )
-        "<fw:wizzywig #{html_options(options)}><![CDATA[#{wizzywig_text}]]></fw:wizzywig>".html_safe
-      end
-      
       # can take an option: :tokens which is a hash for replacement and will add in the appropriate fw:intl-token tags 
       # ex: 
       #  <%= fwml :intl, :description=>"bogus", :tokens=>{ :tier=>"Tier 1", :image_limit=>"10", :upgrade_link=>"www.blah.com" } do %>
@@ -95,27 +35,99 @@ module Webs
       #
       # <fw:intl>hello world</fw:intl>
       #
-      def fw_intl options={}, &block
 
-        value = options.delete( :value)
-        tokens = options.delete( :tokens )
-        if block
-          tag = render_tag_with_block 'intl', options, false, &block
-          
-          idx = tag.length - 10
-          token_str = tokens.keys.collect{ |k| %[<fw:intl-token name="#{k}">#{tokens[k]}</fw:intl-token>] }.join( "\n" )
-          (tag[0..idx-1] + token_str.html_safe + tag[idx..tag.length-1]).html_safe
+      def fwml tagname, options={}, &block
+#        Rails.logger.debug "****** fwml #{tagname} #{options.inspect}"
+        tagname = tagname.to_s unless tagname.nil?
+        if ['sanitize', 'wizzywig'].include?(tagname)
+          tag = self.send( "fw_#{tagname}", options, &block )
         else
-          %[<fw:intl#{html_options(options)}>#{h value}</fw:intl>].html_safe
+          if block
+            tag = render_tag_with_block tagname, options, false, &block
+          else
+            tag = inline_tag( tagname, options )
+          end
+        end
+
+        html_safe_check( tag )
+      end
+      
+      private
+      def html_safe_check s
+        return s if s.blank?
+        s.respond_to?( 'html_safe' ) ? s.html_safe : s
+      end
+
+      def html_options options
+        ' ' + options.each_key.select{ |k| !options[k].blank? }.collect{|k| "#{k.to_s}=\"#{options[k]}\"" }.join(' ')  if options.any?
+      end
+
+      def parse_fwml_options tagname, options
+        s = ''
+        if ( attrs = options.delete( :fw_attributes ) )
+          s += attr_hash.keys.collect{ |k| %[<fw:fwml-attribute name="#{k}">#{attributes[k]}</fw:fwml-attribute>] }.join( "\n" )
+        end
+        if ( intl_attrs = options.delete( :fw_intl_attrs ) )
+          s += attr_hash.keys.collect{ |k| %[<fw:fwml-attribute name="#{k}">#{attributes[k]}</fw:fwml-attribute>] }.join( "\n" )
+        end
+        if tagname == 'intl' && ( tokens = options.delete( :tokens ) )
+          s += token_str = tokens.keys.collect{ |k| %[<fw:intl-token name="#{k}">#{tokens[k]}</fw:intl-token>] }.join( "\n" )
+        end
+        s
+      end
+      
+      def render_tag_with_block tagname, options, cdata_wrapper=false, &block
+        content = capture(&block)
+
+        # parse attributes to append before closing tag
+        append_str = parse_fwml_options tagname, options 
+
+        output = begin
+          ActiveSupport::SafeBuffer.new
+        rescue
+          nil
+        end
+
+        if output
+          # RAILS3
+          output.safe_concat("<fw:#{tagname}#{html_options(options)}>")
+          output.safe_concat("<![CDATA[") if cdata_wrapper
+          output << content  
+          output.safe_concat( append_str ) if !append_str.blank?
+          output.safe_concat("]]>") if cdata_wrapper
+          output.safe_concat("</fw:#{tagname}>")
+        else
+          # RAILS2
+          concat("<fw:#{tagname}#{html_options(options)}>", block.binding)
+          concat("<![CDATA[", block.binding) if cdata_wrapper
+          concat( content, block.binding)
+          concat( append_str, block.binding ) if !append_str.blank?
+          concat("]]>", block.binding) if cdata_wrapper
+          concat("</fw:#{tagname}>", block.binding)
         end
       end
-    end
+      
+      def inline_tag( tagname, options={} )
+        value = options.delete( :value ) if ['intl'].include?(tagname)
+        append_str = parse_fwml_options tagname, options 
+        if !append_str.blank? || !value.blank?
+          "<fw:#{tagname}#{html_options(options)}>#{value}#{append_str}</fw:#{tagname}>"
+        else
+          "<fw:#{tagname}#{html_options(options)}/>"
+        end
+      end
+      
+      def fw_sanitize options={}, &block
+        cdata_wrapper = options.delete(:cdata) 
+        cdata_wrapper = true if cdata_wrapper.nil?
+        render_tag_with_block 'sanitize', options, cdata_wrapper, &block
+      end
+      
+      # fw_wizzywig should never be called with a block the text is passed in via text
+      def fw_wizzywig options={}
+        wizzywig_text = options.delete( :wizzywig_text )
+        html_safe_check "<fw:wizzywig #{html_options(options)}><![CDATA[#{wizzywig_text}]]></fw:wizzywig>"
+      end
+    end     
   end
 end
-
-# No support for rails 2
-# concat("<fw:#{tagname}#{s_options}>", block.binding)
-# concat("<![CDATA[") if cdata_wrapper
-# concat( content, block.binding)
-# concat("]]>") if cdata_wrapper
-# concat("</fw:#{tagname}>", block.binding)
