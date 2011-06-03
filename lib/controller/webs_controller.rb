@@ -97,7 +97,15 @@ module Webs
       end
       
       def set_webs_permapath pp=nil
-        @permapath = pp || request.path || "/"
+        @permapath = pp 
+        if @permapath.nil?
+          @permapath = request.path
+          if !@permapath.blank? && defined?(Webs::PLATFORM_CONTEXT_PATH) && @permapath.index( Webs::PLATFORM_CONTEXT_PATH )==0
+            @permapath = @permapath[(Webs::PLATFORM_CONTEXT_PATH.length)..@permapath.length-1] 
+          end
+        end
+        @permapath ||= "/"
+        @permapath
       end
 
       def validate_webs_session
