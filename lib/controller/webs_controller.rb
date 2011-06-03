@@ -97,7 +97,7 @@ module Webs
       end
       
       def set_webs_permapath pp=nil
-        @permapath = pp || request.env["REQUEST_PATH"] || "/"
+        @permapath = pp || request.path || "/"
       end
 
       def validate_webs_session
