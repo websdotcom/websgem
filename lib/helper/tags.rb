@@ -59,7 +59,10 @@ module Webs
       end
 
       def html_options options
-        ' ' + options.each_key.select{ |k| !options[k].blank? }.collect{|k| "#{k.to_s}=\"#{options[k]}\"" }.join(' ')  if options.any?
+        return ' ' if options.empty?
+        opt_str = ' '
+        options.each_key { |k| opt_str += "#{k.to_s}=\"#{options[k]}\" " if !options[k].blank? }
+        opt_str
       end
 
       def parse_fwml_options tagname, options
