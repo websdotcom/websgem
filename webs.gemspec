@@ -9,27 +9,7 @@ Gem::Specification.new do |s|
   s.date = %q{2011-06-08}
   s.description = %q{Reusable webs stuff.}
   s.email = %q{chuck@webs.com}
-  gemfiles = [
-      "README.rdoc", 
-      "lib/webs.rb",  
-      "lib/cache/cache.rb", 
-      "lib/config/webs_constants.rb", 
-      "lib/config/webs_initializer.rb", 
-      "lib/config/initializers/http_accept_patch.rb", 
-      "lib/controller/url_for_context_path.rb", 
-      "lib/controller/alive_controller.rb", 
-      "lib/controller/info_controller.rb", 
-      "lib/controller/webs_controller.rb", 
-      "lib/helper/application.rb", 
-      "lib/helper/params.rb", 
-      "lib/helper/tags.rb", 
-      "lib/middleware/parameter_fixer.rb", 
-      "lib/views/layouts/webs_page.html.erb", 
-      "lib/views/layouts/webs_utility.html.erb", 
-      "lib/test/webs_test_helper.rb", 
-      "lib/views/shared/_webs_info.html.erb", 
-      "lib/views/shared/_jquery_noconflict.html.erb", 
-  ]
+  gemfiles = Dir.glob( "**/*.{erb,rb,rdoc}" )
   s.extra_rdoc_files = gemfiles
   s.files = gemfiles + [ "Rakefile", "webs.gemspec" ]
   s.homepage = %q{http://github.com/websdotcom/websgem}
