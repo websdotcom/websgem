@@ -51,7 +51,7 @@ module Webs
 
         html_safe_check( tag )
       end
-      
+
       private
       def html_safe_check s
         return s if s.blank?
@@ -64,14 +64,18 @@ module Webs
 
       def parse_fwml_options tagname, options
         s = ''
-        if ( attrs = options.delete( :fw_attributes ) )
-          s += attr_hash.keys.collect{ |k| %[<fw:fwml-attribute name="#{k}">#{attributes[k]}</fw:fwml-attribute>] }.join( "\n" )
+        intl_attrs = {}
+        options.keys.each do |k|
+          if k.to_s.ends_with?( '_intl' )
+            option_name = k.to_s.gsub( /_intl$/, '' )
+            intl_attrs[option_name] = options.delete( k )
+          end
         end
-        if ( intl_attrs = options.delete( :fw_intl_attrs ) )
-          s += attr_hash.keys.collect{ |k| %[<fw:fwml-attribute name="#{k}">#{attributes[k]}</fw:fwml-attribute>] }.join( "\n" )
+        if intl_attrs
+          s += intl_attrs.keys.collect{ |k| %[<fw:fwml-attribute name="#{k}"><fw:intl>#{intl_attrs[k]}</fw:intl></fw:fwml-attribute>] }.join( "\n" )
         end
         if tagname == 'intl' && ( tokens = options.delete( :tokens ) )
-          s += token_str = tokens.keys.collect{ |k| %[<fw:intl-token name="#{k}">#{tokens[k]}</fw:intl-token>] }.join( "\n" )
+          s += tokens.keys.collect{ |k| %[<fw:intl-token name="#{k}">#{tokens[k]}</fw:intl-token>] }.join( "\n" )
         end
         s
       end

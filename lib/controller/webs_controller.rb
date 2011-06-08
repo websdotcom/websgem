@@ -8,14 +8,15 @@ module Webs
       end
   
       module ClassMethods
+        mattr_accessor :disable_cache
         def webs_helpers
           helper Webs::Helper::Application
           helper Webs::Helper::Params
           helper Webs::Helper::Tags
-          helper Webs::Cache
+          helper Webs::Cache unless disable_cache
           include Webs::Helper::Params
           include Webs::Helper::Tags
-          include Webs::Cache
+          include Webs::Cache unless disable_cache
           helper_method :webs_site
           helper_method :webs_app_name
           helper_method :webs_permapath

@@ -1,5 +1,6 @@
 module Webs
   mattr_accessor :cache
+
   module Cache
     mattr_accessor :debug
     mattr_accessor :off
