@@ -1,4 +1,4 @@
-if Rails::VERSION::STRING[0].to_i < 3
+if Rails::VERSION::STRING[0..0].to_i < 3
 # adds the fw:intl tag to options values
 module ActionView
   module Helpers
