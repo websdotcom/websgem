@@ -1,3 +1,9 @@
 <% if flash[:notice] %>
-  <div class="fw-flash"><fw:intl><%= flash[:notice] %></fw:intl></div>
+  <div class="fw-flash">
+  <% if flash[:notice].index( '<fw:intl' ) %>
+    <%= flash[:notice] %>
+  <% else %>
+    <fw:intl><%= flash[:notice] %></fw:intl>
+  <% end %>
+  </div>
 <% end %>
