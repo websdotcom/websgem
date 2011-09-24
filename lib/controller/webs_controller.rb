@@ -166,6 +166,38 @@ module Webs
       def fix_request_format
         request.format = :html if request.format.blank? || ( request.format.to_s =~ /^charset/i || request.format.to_s =~ /^url_encoded_form/i )
       end
+
+      def fix_encoding 
+        fix_encoding_for_hash params
+      end
+
+      def fix_encoding_for_hash h_params
+        return if h_params.nil?
+        h_params.each_pair do |k,v|
+          if v.is_a?(String)
+            h_params[k] = to_iso8859( v )
+          elsif v.is_a?(Hash)
+            fix_encoding_for_hash v
+          elsif v.is_a?(Array)
+            fix_encoding_for_array v
+          end
+        end
+      end
+
+
+      def fix_encoding_for_array a_params
+        return if a_params.nil?
+        a_params.each_with_index do |v, idx|
+          if v.is_a?(String)
+            a_params[idx] = to_iso8859( v )
+          elsif v.is_a?(Hash)
+            fix_encoding_for_hash v
+          elsif v.is_a?(Array)
+            fix_encoding_for_array v
+          end
+        end
+      end
+
     end
   end
 end

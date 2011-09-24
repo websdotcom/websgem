@@ -1,7 +1,7 @@
 <div class="fw-error">
   <div class="errorExplanation" id="errorExplanation">
     <% options ||= {:header_tag=>'h2'} %>
-    <% content_tag( options[:header_tag] ) do %>
+    <%= content_tag( options[:header_tag] ) do %>
 		  <fw:intl>Please correct the following problems</fw:intl>:
     <% end %>
     <ul>
