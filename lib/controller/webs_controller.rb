@@ -45,11 +45,11 @@ module Webs
       end
 
       def webs_query_string
-        webs_params.collect{ |k,v| [k,v].join("=") }.join("&").to_s
+        webs_params.collect{ |k,v| [k,v].join("=") }.join("&")
       end          
 
       def webs_auth_string
-        webs_params.collect{ |k,v| [k[7..-1],v].join("=") }.to_s
+        webs_params.collect{ |k,v| [k[7..-1],v].join("=") }.join
       end          
 
       # http://wiki.developers.webs.com/wiki/Verifying_Requests
