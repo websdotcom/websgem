@@ -1,4 +1,4 @@
-<%= fwml :utility, :title=>@title do %>
+<%= fwml :utility, @pageAttributes || { :title => @title } do %>
   <fw:head>
     <%= javascript_include_tag 'application' %>
     <%= stylesheet_link_tag 'styles' %>
