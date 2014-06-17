@@ -1,4 +1,4 @@
-<%= fwml :utility, @pageAttributes || { :title => @title } do %>
+<%= fwml :utility, { :title => @title }.merge!(@page_attributes || {}) do %>
   <fw:head>
     <%= javascript_include_tag 'application' %>
     <%= stylesheet_link_tag 'styles' %>
