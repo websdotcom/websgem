@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chuck Olczak"]
-  s.date = %q{2013-10-25}
+  s.date = %q{2014-06-18}
   s.description = %q{Reusable webs stuff.}
   s.email = %q{chuck@webs.com}
   gemfiles = Dir.glob( "**/*.{erb,rb,rdoc}" )
