@@ -3,11 +3,18 @@
 WebsGem is a holder of knowlege with unknown equal. It:
 
 * Manages fw:params
+* Provides baseline controllers and views for Webs-maintained Rails apps
+to ensure a consistent UI and experience across the platform
+* Totally takes over Rails
 
-Right now it's composed of 1 modules:
+Right now it's composed of several modules:
 
-** Controller: Stuff for controllers
-** params: Stuff for fw params
+** Cache: Manage memcache interaction
+** Config: Setup a Webs Rails instance from the webs_config.yml
+** Controller: Controller helpers (abuse, permissions, etc. as well as 
+the primary Webs controller you should inherit from)
+** helpers: Controller helpers, including stuff for to manage fw_params
+** views: Some default views you can use to manage standard fw_app responses
 
 == Installation
 
@@ -15,10 +22,11 @@ Right now it's composed of 1 modules:
 
 To use WebsGem with your stuff, in gemfile:
 
-  gem "webs", :git => "git@github.com:websdev/websgem.git"
+  gem "webs", '<version>' (current as of writing is 0.2.2)
 
 === Rails 2.3
 
+  Don't use Rails 2.3, it's over 5 years old!
 
 == Usage
 
@@ -30,14 +38,16 @@ In a controller:
    ...
  
    include Webs::Controller::WebsController
+   include Webs::Helper::Encoding	# Optional
    webs_helpers
   
    # NOTE: Uses Webs::SECRET
-   before_filter :require_valid_user, :except=>[:tab, :contactme_login]
+   before_filter :validate_webs_session, :except=>[:tab, :contactme_login]
   
 
 * Basic convenience methods for all the fw params
-Instead of "params[:fw_sig_session_key]" now you have fw_sig_session_key
+Instead of "params[:fw_sig_session_key]" or request.headers[:fw_sig_session_key] 
+now you have fw_sig_session_key
 
 * Cool helper methods:
 fw_app_url : full url of the app
@@ -45,28 +55,26 @@ ex: http://mysite.webs.com/apps/videos
 
 * Security
 
-Create a webs.rb file in config/initializers
+Create a webs_config.yml file in /config
 
- module Webs
-   SECRET = "your_secret_key"
- end
+   ...
+   secret: "your_secret_key"
 
 * FWML Tag:
  <%= fwml :tagname, ... %>
 
-== TODO
-
-Please refer to TODO file.
-
 == Maintainers
 
-* Chuck Olczak (http://github.com/colczak)
+* Idris Mokhtarzada(http://github.com/idris)
+* Michael Hackner (http://github.com/HackAttack)
+* Harbhajan Singh (http://github.com/hsingh6764)
+* Will Moore (http://github.com/wlmoore-webs)
 
 == Contributors
 
 == Bugs and Feedback
 
-If you discover any bugs, please keep them to yourself.
+If you discover any bugs, please keep them to yourself.  Or submit a PR, we don't care!
 
 == License
 

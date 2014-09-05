@@ -5,7 +5,7 @@ module Webs
        :fw_sig_url, :fw_sig_user, :fw_sig_width, :fw_sig_social, :fw_sig_premium, :fb_sig_network, :fw_sig_captcha_valid]
        
       FW_PARAMS.each do |fw_param|
-         module_eval( "def #{fw_param.to_s}() params[:#{fw_param.to_s}] end" )
+         module_eval( "def #{fw_param.to_s}() params[:#{fw_param.to_s}] or request.headers['#{fw_param.to_s}'] end" )
       end
                
       # Some basic useful methods
