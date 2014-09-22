@@ -46,7 +46,7 @@ In a controller:
   
 
 * Basic convenience methods for all the fw params
-Instead of "params[:fw_sig_session_key]" or request.headers[:fw_sig_session_key] 
+Instead of params['fw_sig_session_key'] or request.headers['fw_sig_session_key'] 
 now you have fw_sig_session_key
 
 * Cool helper methods:
