@@ -3,3 +3,5 @@ doc
 Manifest
 *.gem
 *.swp
+.raketasks
+*.iml
