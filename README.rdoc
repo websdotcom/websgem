@@ -22,7 +22,7 @@ the primary Webs controller you should inherit from)
 
 To use WebsGem with your stuff, in gemfile:
 
-  gem "webs", '<version>' (current as of writing is 0.2.2)
+  gem "webs", '<version>'
 
 === Rails 2.3
 
