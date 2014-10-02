@@ -72,7 +72,7 @@ module Webs
       end
       
       def webs_params
-        params.select{ |k,v| k.starts_with?("fw_sig_") }.sort
+        params.select{ |k,v| k.starts_with?("fw_sig_") }.concat(request.headers.select{ |k,v| k.starts_with?("fw_sig_") }).sort
       end
       
       # The full url of the app.  Since in APP_NAME can be different in different environments this is currently
