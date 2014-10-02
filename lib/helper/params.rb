@@ -71,9 +71,11 @@ module Webs
         fw_sig_site.to_i if !fw_sig_site.blank?
       end
       
-      def webs_params
-        params.select{ |k,v| k.starts_with?("fw_sig_") }.concat(request.headers.select{ |k,v| k.starts_with?("fw_sig_") }).sort
-      end
+			def webs_params
+				headerParams = request.headers.select{ |k,v| k.downcase.starts_with?("http_fw_sig_") }.map{|k,v| [k[5..k.length].downcase, v] }
+				bodyParams = params.select{ |k,v| k.starts_with?("fw_sig_") }
+				headerParams.concat(bodyParams).sort
+			end
       
       # The full url of the app.  Since in APP_NAME can be different in different environments this is currently
       # defined in a global var, usually in the respective env file, however APP_NAME should be moved to something

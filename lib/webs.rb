@@ -7,7 +7,7 @@ require dir + 'helper/params'
 require dir + 'helper/tags'
 
 module Webs
-  VERSION = '0.3.3'.freeze
+  VERSION = '0.3.4'.freeze
 
   def self.app_title
     APP_NAME.titleize
