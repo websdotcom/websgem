@@ -2,7 +2,8 @@ module Webs
   module Helper
     module Params
       FW_PARAMS = [:fw_sig, :fw_sig_site, :fw_sig_is_admin, :fw_sig_permission_level, :fw_sig_session_key, :fw_sig_tier, :fw_sig_permissions, :fw_sig_time, :fw_sig_api_key, 
-       :fw_sig_url, :fw_sig_user, :fw_sig_width, :fw_sig_social, :fw_sig_premium, :fb_sig_network, :fw_sig_captcha_valid, :fw_sig_locale]
+       :fw_sig_url, :fw_sig_user, :fw_sig_width, :fw_sig_social, :fw_sig_premium, :fb_sig_network, :fw_sig_captcha_valid, :fw_sig_locale,
+       :fw_sig_access_token, :fw_sig_partner ]
        
       FW_PARAMS.each do |fw_param|
          module_eval( "def #{fw_param.to_s}() params[:#{fw_param.to_s}] || request.headers['#{fw_param.to_s}'] end" )
